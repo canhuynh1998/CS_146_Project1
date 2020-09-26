@@ -5,9 +5,9 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 // Models an N-by-N percolation system.
 public class Percolation {
     private int[][] grid;
-    private int size;
+    private final int size;
     private int open_site;
-    private int uf_size;
+    private final int uf_size;
     private WeightedQuickUnionUF uf;
     private WeightedQuickUnionUF check_backwash;
 
@@ -39,7 +39,7 @@ public class Percolation {
     // Check individually with if statements
     public void open(int row, int col) {
         // Accept row and col == 0
-        if (row < -1 || row > this.size || col > this.size || col < -1) {
+        if (row < 0 || row >= this.size || col >= this.size || col < 0) {
             throw new IndexOutOfBoundsException("Row or column is out of bound.");
         }
 
@@ -51,30 +51,30 @@ public class Percolation {
 
         // Connect with the upper site
         // Values are valid if the row value's is >= 0
-        if (row >= 0) {
-            // Check if the site is at the top row and union check_backwash
-            // Connect to the top virtual site if it is
-            if (row == 0) {
-                this.uf.union(this.encode(row, col), 0);
-                this.check_backwash.union(this.encode(row, col), 0);
-            } else if (this.isOpen(row - 1, col)) {
-                this.uf.union(this.encode(row, col), this.encode(row - 1, col));
-                this.check_backwash.union(this.encode(row, col), this.encode(row - 1, col));
-            }
+
+        // Check if the site is at the top row and union check_backwash
+        // Connect to the top virtual site if it is
+        if (row == 0) {
+            this.uf.union(this.encode(row, col), 0);
+            this.check_backwash.union(this.encode(row, col), 0);
+        } else if (this.isOpen(row - 1, col)) {
+            this.uf.union(this.encode(row, col), this.encode(row - 1, col));
+            this.check_backwash.union(this.encode(row, col), this.encode(row - 1, col));
         }
+
 
         // Connect the bottom site
         // Values are valid if the row value's is < this.size
-        if (row < this.size) {
-            // Check if the site is at the bottom row. This won't union the check_backwash to avoid backwash case.
-            // Connect to the bottom virtual site if it is
-            if (row == this.size - 1) {
-                this.uf.union(this.encode(row, col), this.uf_size - 1);
-            } else if (this.isOpen(row + 1, col)) {
-                this.uf.union(this.encode(row, col), this.encode(row + 1, col));
-                this.check_backwash.union(this.encode(row, col), this.encode(row + 1, col));
-            }
+
+        // Check if the site is at the bottom row. This won't union the check_backwash to avoid backwash case.
+        // Connect to the bottom virtual site if it is
+        if (row == this.size - 1) {
+            this.uf.union(this.encode(row, col), this.uf_size - 1);
+        } else if (this.isOpen(row + 1, col)) {
+            this.uf.union(this.encode(row, col), this.encode(row + 1, col));
+            this.check_backwash.union(this.encode(row, col), this.encode(row + 1, col));
         }
+
 
         // Connect the left site
         // col - 1 is the condition to check if out of bound. This will accept col - 1 == 0
@@ -106,7 +106,7 @@ public class Percolation {
     // Use check_backwash instead of uf.
     // This will avoid the back_wash case and give an accurate GUI
     public boolean isFull(int row, int col) {
-        if (row < -1 || row > this.size || col > this.size || col < -1) {
+        if (row < 0 || row >= this.size || col >= this.size || col < 0) {
             throw new IndexOutOfBoundsException("Row or column is out of bound.");
         }
         int current_index = this.encode(row, col);

@@ -4,9 +4,9 @@ import edu.princeton.cs.algs4.StdStats;
 
 // Estimates percolation threshold for an N-by-N percolation system.
 public class PercolationStats {
-    private final int experiment_time;
-    private int size;
-    private double[] sum_average;
+    private final int experiment_time;  //T
+    private int size;   //N
+    private double[] sum_average;   //this array is using for calculating the mean and stddev
 
     // Perform T independent experiments (Monte Carlo simulations) on an
     // N-by-N grid.
@@ -18,6 +18,9 @@ public class PercolationStats {
         size = N;  // the size of the grid
         experiment_time = T;   // number of executions
         sum_average = new double[experiment_time];
+
+        // Creating experiment_time of perc
+        // Open sites randomly
         for (int i = 0; i < experiment_time; i++) {
             perc = new Percolation(size);
             while (!perc.percolates()) {

@@ -50,8 +50,6 @@ public class Percolation {
         }
 
         // Connect with the upper site
-        // Values are valid if the row value's is >= 0
-
         // Check if the site is at the top row and union check_backwash
         // Connect to the top virtual site if it is
         if (row == 0) {
@@ -64,8 +62,6 @@ public class Percolation {
 
 
         // Connect the bottom site
-        // Values are valid if the row value's is < this.size
-
         // Check if the site is at the bottom row. This won't union the check_backwash to avoid backwash case.
         // Connect to the bottom virtual site if it is
         if (row == this.size - 1) {
@@ -95,7 +91,7 @@ public class Percolation {
     // If the value of grid[row][col] == 1, return true
     // Otherwise, return false
     public boolean isOpen(int row, int col) {
-        if (row < -1 || row > this.size || col > this.size || col < -1) {
+        if (row < 0 || row >= this.size || col >= this.size || col < 0) {
             throw new IndexOutOfBoundsException("Row or column is out of bound.");
         }
         return this.grid[row][col] == 1;
